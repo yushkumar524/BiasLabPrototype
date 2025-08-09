@@ -50,12 +50,6 @@ const ArticleDetail = () => {
     return colors[source] || '#666666';
   };
 
-  const getIdeologicalStanceLabel = (ideologicalStance) => {
-    if (ideologicalStance > 10) return `Right (+${ideologicalStance.toFixed(1)})`;
-    if (ideologicalStance < -10) return `Left (${ideologicalStance.toFixed(1)})`;
-    return 'Center (0.0)';
-  };
-
   if (loading) {
     return <div className="loading">Loading article...</div>;
   }
@@ -195,25 +189,19 @@ const ArticleDetail = () => {
           }}>
             <BiasRadar biasScores={article.bias_scores} />
             
-            {/* Bias Scores Summary */}
-            <div style={{ marginTop: '1.5rem', fontSize: '0.9rem' }}>
-              <div style={{ marginBottom: '0.5rem' }}>
-                <strong>Overall Bias:</strong> {article.bias_scores.overall.toFixed(1)}%
+            {/* Bias Summary with controlled spacing */}
+            <div style={{ 
+              marginTop: '1rem', // Reduced margin since BiasRadar now controls its own spacing
+              padding: '1rem',
+              backgroundColor: '#f8f9fa',
+              borderRadius: '0.5rem',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#2d3748' }}>
+                Overall Bias Score: {article.bias_scores.overall.toFixed(1)}%
               </div>
-              <div style={{ marginBottom: '0.5rem' }}>
-                <strong>Ideological Stance:</strong> {getIdeologicalStanceLabel(article.bias_scores.ideological_stance)}
-              </div>
-              <div style={{ marginBottom: '0.5rem' }}>
-                <strong>Factual Grounding:</strong> {article.bias_scores.factual_grounding.toFixed(1)}%
-              </div>
-              <div style={{ marginBottom: '0.5rem' }}>
-                <strong>Framing Choices:</strong> {article.bias_scores.framing_choices.toFixed(1)}%
-              </div>
-              <div style={{ marginBottom: '0.5rem' }}>
-                <strong>Emotional Tone:</strong> {article.bias_scores.emotional_tone.toFixed(1)}%
-              </div>
-              <div>
-                <strong>Source Transparency:</strong> {article.bias_scores.source_transparency.toFixed(1)}%
+              <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.5rem' }}>
+                See radar chart above for detailed breakdown
               </div>
             </div>
           </div>

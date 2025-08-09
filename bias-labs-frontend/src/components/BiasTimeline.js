@@ -6,7 +6,7 @@ const BiasTimeline = ({ timelineData }) => {
     return <div style={{ textAlign: 'center', color: '#666' }}>No timeline data available</div>;
   }
 
-  // Format data for the chart with the correct 5 dimensions
+  // Format data for the chart with all 5 dimensions
   const chartData = timelineData.map((point, index) => ({
     time: new Date(point.timestamp).toLocaleDateString('en-US', { 
       month: 'short', 
@@ -18,7 +18,7 @@ const BiasTimeline = ({ timelineData }) => {
     ideologicalStance: Math.abs(point.bias_scores.ideological_stance),
     factualGrounding: 100 - point.bias_scores.factual_grounding, // Invert for consistency
     framingChoices: point.bias_scores.framing_choices,
-    emotionalTone: point.bias_scores.emotional_tone,
+    emotionalTone: point.bias_scores.emotional_tone, // Now included in chart
     sourceTransparency: 100 - point.bias_scores.source_transparency, // Invert for consistency
     articleCount: point.article_count,
     index: index
@@ -104,6 +104,14 @@ const BiasTimeline = ({ timelineData }) => {
             strokeWidth={2}
             dot={{ fill: '#feca57', strokeWidth: 1, r: 3 }}
             name="Framing Choices"
+          />
+          <Line
+            type="monotone"
+            dataKey="emotionalTone"
+            stroke="#ff9ff3"
+            strokeWidth={2}
+            dot={{ fill: '#ff9ff3', strokeWidth: 1, r: 3 }}
+            name="Emotional Tone"
           />
           <Line
             type="monotone"

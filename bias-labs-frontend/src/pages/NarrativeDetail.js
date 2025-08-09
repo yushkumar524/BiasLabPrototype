@@ -100,29 +100,33 @@ const NarrativeDetail = () => {
       </div>
 
       {/* Bias Analysis Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
         <div>
           <h2 style={{ marginBottom: '1rem', fontSize: '1.5rem', fontWeight: '600' }}>
             Average Bias Analysis
           </h2>
-          <BiasRadar biasScores={narrative.avg_bias_scores} />
+          <div style={{ minHeight: '400px' }}> {/* Added min height to ensure proper spacing */}
+            <BiasRadar biasScores={narrative.avg_bias_scores} />
+          </div>
         </div>
         <div>
           <h2 style={{ marginBottom: '1rem', fontSize: '1.5rem', fontWeight: '600' }}>
             Bias Evolution Over Time
           </h2>
-          {narrative.bias_evolution && narrative.bias_evolution.length > 0 ? (
-            <BiasTimeline timelineData={narrative.bias_evolution} />
-          ) : (
-            <div style={{ padding: '2rem', textAlign: 'center', color: '#666', background: '#f8f9fa', borderRadius: '0.5rem' }}>
-              Not enough data points for timeline
-            </div>
-          )}
+          <div style={{ minHeight: '400px' }}> {/* Added min height to ensure proper spacing */}
+            {narrative.bias_evolution && narrative.bias_evolution.length > 0 ? (
+              <BiasTimeline timelineData={narrative.bias_evolution} />
+            ) : (
+              <div style={{ padding: '2rem', textAlign: 'center', color: '#666', background: '#f8f9fa', borderRadius: '0.5rem' }}>
+                Not enough data points for timeline
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Articles Section */}
-      <div>
+      {/* Articles Section - Now with proper spacing */}
+      <div style={{ marginTop: '3rem' }}> {/* Added explicit margin top */}
         <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: '600' }}>
           Articles in This Narrative
         </h2>
