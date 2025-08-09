@@ -36,6 +36,12 @@ const Homepage = () => {
     return 'High Bias';
   };
 
+  const getIdeologicalStanceLabel = (ideologicalStance) => {
+    if (ideologicalStance > 10) return 'Right';
+    if (ideologicalStance < -10) return 'Left';
+    return 'Center';
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
@@ -129,7 +135,7 @@ const Homepage = () => {
                   </div>
                 </div>
 
-                {/* Political lean indicator */}
+                {/* Ideological stance indicator */}
                 <div style={{ 
                   marginTop: '0.75rem', 
                   fontSize: '0.85rem',
@@ -138,13 +144,8 @@ const Homepage = () => {
                   color: '#666'
                 }}>
                   <span>
-                    Political Lean: <strong>
-                      {narrative.avg_bias_scores.political_lean > 5 
-                        ? 'Right' 
-                        : narrative.avg_bias_scores.political_lean < -5 
-                        ? 'Left' 
-                        : 'Center'
-                      }
+                    Ideological Lean: <strong>
+                      {getIdeologicalStanceLabel(narrative.avg_bias_scores.ideological_stance)}
                     </strong>
                   </span>
                   <span>

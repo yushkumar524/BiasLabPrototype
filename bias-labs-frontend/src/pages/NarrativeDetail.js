@@ -56,6 +56,12 @@ const NarrativeDetail = () => {
     return colors[source] || '#666666';
   };
 
+  const getIdeologicalStanceLabel = (ideologicalStance) => {
+    if (ideologicalStance > 10) return 'Right';
+    if (ideologicalStance < -10) return 'Left';
+    return 'Center';
+  };
+
   if (loading) {
     return <div className="loading">Loading narrative details...</div>;
   }
@@ -143,10 +149,11 @@ const NarrativeDetail = () => {
               <div className="article-date">
                 {formatDate(article.published_date)}
               </div>
-              <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem' }}>
+              <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', flexWrap: 'wrap' }}>
                 <span>Overall Bias: <strong>{article.bias_scores.overall.toFixed(1)}%</strong></span>
-                <span>Political Lean: <strong>{article.bias_scores.political_lean > 0 ? 'Right' : article.bias_scores.political_lean < 0 ? 'Left' : 'Center'} ({Math.abs(article.bias_scores.political_lean).toFixed(0)})</strong></span>
-                <span>Factual: <strong>{article.bias_scores.factual_reporting.toFixed(0)}%</strong></span>
+                <span>Ideological: <strong>{getIdeologicalStanceLabel(article.bias_scores.ideological_stance)} ({Math.abs(article.bias_scores.ideological_stance).toFixed(0)})</strong></span>
+                <span>Factual: <strong>{article.bias_scores.factual_grounding.toFixed(0)}%</strong></span>
+                <span>Emotional: <strong>{article.bias_scores.emotional_tone.toFixed(0)}%</strong></span>
               </div>
             </div>
           ))}

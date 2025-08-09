@@ -50,6 +50,12 @@ const ArticleDetail = () => {
     return colors[source] || '#666666';
   };
 
+  const getIdeologicalStanceLabel = (ideologicalStance) => {
+    if (ideologicalStance > 10) return `Right (+${ideologicalStance.toFixed(1)})`;
+    if (ideologicalStance < -10) return `Left (${ideologicalStance.toFixed(1)})`;
+    return 'Center (0.0)';
+  };
+
   if (loading) {
     return <div className="loading">Loading article...</div>;
   }
@@ -153,19 +159,23 @@ const ArticleDetail = () => {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', fontSize: '0.85rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                   <div style={{ width: '12px', height: '12px', backgroundColor: '#ff6b6b', borderRadius: '2px' }}></div>
-                  Political Bias
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                  <div style={{ width: '12px', height: '12px', backgroundColor: '#feca57', borderRadius: '2px' }}></div>
-                  Emotional Language
+                  Ideological Stance
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                   <div style={{ width: '12px', height: '12px', backgroundColor: '#48dbfb', borderRadius: '2px' }}></div>
-                  Source Issues
+                  Factual Grounding
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <div style={{ width: '12px', height: '12px', backgroundColor: '#feca57', borderRadius: '2px' }}></div>
+                  Framing Choices
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                   <div style={{ width: '12px', height: '12px', backgroundColor: '#ff9ff3', borderRadius: '2px' }}></div>
-                  Factual Concerns
+                  Emotional Tone
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <div style={{ width: '12px', height: '12px', backgroundColor: '#54a0ff', borderRadius: '2px' }}></div>
+                  Source Transparency
                 </div>
               </div>
             </div>
@@ -191,22 +201,19 @@ const ArticleDetail = () => {
                 <strong>Overall Bias:</strong> {article.bias_scores.overall.toFixed(1)}%
               </div>
               <div style={{ marginBottom: '0.5rem' }}>
-                <strong>Political Lean:</strong> {
-                  article.bias_scores.political_lean > 0 
-                    ? `Right (+${article.bias_scores.political_lean.toFixed(1)})` 
-                    : article.bias_scores.political_lean < 0 
-                    ? `Left (${article.bias_scores.political_lean.toFixed(1)})` 
-                    : 'Center (0.0)'
-                }
+                <strong>Ideological Stance:</strong> {getIdeologicalStanceLabel(article.bias_scores.ideological_stance)}
               </div>
               <div style={{ marginBottom: '0.5rem' }}>
-                <strong>Emotional Language:</strong> {article.bias_scores.emotional_language.toFixed(1)}%
+                <strong>Factual Grounding:</strong> {article.bias_scores.factual_grounding.toFixed(1)}%
               </div>
               <div style={{ marginBottom: '0.5rem' }}>
-                <strong>Factual Reporting:</strong> {article.bias_scores.factual_reporting.toFixed(1)}%
+                <strong>Framing Choices:</strong> {article.bias_scores.framing_choices.toFixed(1)}%
+              </div>
+              <div style={{ marginBottom: '0.5rem' }}>
+                <strong>Emotional Tone:</strong> {article.bias_scores.emotional_tone.toFixed(1)}%
               </div>
               <div>
-                <strong>Source Diversity:</strong> {article.bias_scores.source_diversity.toFixed(1)}%
+                <strong>Source Transparency:</strong> {article.bias_scores.source_transparency.toFixed(1)}%
               </div>
             </div>
           </div>

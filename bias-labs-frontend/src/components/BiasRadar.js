@@ -8,28 +8,28 @@ const BiasRadar = ({ biasScores }) => {
 
   const data = [
     {
-      dimension: 'Political\nLean',
-      score: Math.abs(biasScores.political_lean),
+      dimension: 'Ideological\nStance',
+      score: Math.abs(biasScores.ideological_stance),
       fullMark: 100,
     },
     {
-      dimension: 'Emotional\nLanguage',
-      score: biasScores.emotional_language,
+      dimension: 'Factual\nGrounding',
+      score: 100 - biasScores.factual_grounding, // Invert so high factual = low bias
       fullMark: 100,
     },
     {
-      dimension: 'Source\nDiversity',
-      score: 100 - biasScores.source_diversity, // Invert so high diversity = low bias
+      dimension: 'Framing\nChoices',
+      score: biasScores.framing_choices,
       fullMark: 100,
     },
     {
-      dimension: 'Factual\nReporting',
-      score: 100 - biasScores.factual_reporting, // Invert so high factual = low bias
+      dimension: 'Emotional\nTone',
+      score: biasScores.emotional_tone,
       fullMark: 100,
     },
     {
-      dimension: 'Overall\nBias',
-      score: biasScores.overall,
+      dimension: 'Source\nTransparency',
+      score: 100 - biasScores.source_transparency, // Invert so high transparency = low bias
       fullMark: 100,
     },
   ];
@@ -66,10 +66,11 @@ const BiasRadar = ({ biasScores }) => {
           <strong>Higher scores indicate more bias</strong>
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.25rem' }}>
-          <div>Political: {biasScores.political_lean > 0 ? 'Right' : biasScores.political_lean < 0 ? 'Left' : 'Center'}</div>
-          <div>Emotional: {biasScores.emotional_language.toFixed(0)}%</div>
-          <div>Source Issues: {(100 - biasScores.source_diversity).toFixed(0)}%</div>
-          <div>Factual Issues: {(100 - biasScores.factual_reporting).toFixed(0)}%</div>
+          <div>Ideological: {biasScores.ideological_stance > 0 ? 'Right' : biasScores.ideological_stance < 0 ? 'Left' : 'Center'}</div>
+          <div>Factual Issues: {(100 - biasScores.factual_grounding).toFixed(0)}%</div>
+          <div>Framing Bias: {biasScores.framing_choices.toFixed(0)}%</div>
+          <div>Emotional Tone: {biasScores.emotional_tone.toFixed(0)}%</div>
+          <div>Transparency Issues: {(100 - biasScores.source_transparency).toFixed(0)}%</div>
         </div>
       </div>
     </div>

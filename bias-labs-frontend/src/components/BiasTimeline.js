@@ -6,7 +6,7 @@ const BiasTimeline = ({ timelineData }) => {
     return <div style={{ textAlign: 'center', color: '#666' }}>No timeline data available</div>;
   }
 
-  // Format data for the chart
+  // Format data for the chart with the correct 5 dimensions
   const chartData = timelineData.map((point, index) => ({
     time: new Date(point.timestamp).toLocaleDateString('en-US', { 
       month: 'short', 
@@ -15,9 +15,11 @@ const BiasTimeline = ({ timelineData }) => {
     }),
     timestamp: point.timestamp,
     overallBias: point.bias_scores.overall,
-    politicalLean: Math.abs(point.bias_scores.political_lean),
-    emotionalLanguage: point.bias_scores.emotional_language,
-    factualReporting: 100 - point.bias_scores.factual_reporting, // Invert for consistency
+    ideologicalStance: Math.abs(point.bias_scores.ideological_stance),
+    factualGrounding: 100 - point.bias_scores.factual_grounding, // Invert for consistency
+    framingChoices: point.bias_scores.framing_choices,
+    emotionalTone: point.bias_scores.emotional_tone,
+    sourceTransparency: 100 - point.bias_scores.source_transparency, // Invert for consistency
     articleCount: point.article_count,
     index: index
   }));
@@ -35,17 +37,20 @@ const BiasTimeline = ({ timelineData }) => {
           fontSize: '0.85rem'
         }}>
           <p style={{ fontWeight: '600', marginBottom: '0.5rem' }}>{label}</p>
-          <p style={{ color: '#667eea', margin: '0.25rem 0' }}>
-            Overall Bias: {data.overallBias.toFixed(1)}%
+          <p style={{ color: '#ff6b6b', margin: '0.25rem 0' }}>
+            Ideological Stance: {data.ideologicalStance.toFixed(1)}%
           </p>
-          <p style={{ color: '#f56565', margin: '0.25rem 0' }}>
-            Political Bias: {data.politicalLean.toFixed(1)}%
+          <p style={{ color: '#48dbfb', margin: '0.25rem 0' }}>
+            Factual Grounding: {data.factualGrounding.toFixed(1)}%
           </p>
-          <p style={{ color: '#ed8936', margin: '0.25rem 0' }}>
-            Emotional Language: {data.emotionalLanguage.toFixed(1)}%
+          <p style={{ color: '#feca57', margin: '0.25rem 0' }}>
+            Framing Choices: {data.framingChoices.toFixed(1)}%
           </p>
-          <p style={{ color: '#38b2ac', margin: '0.25rem 0' }}>
-            Factual Issues: {data.factualReporting.toFixed(1)}%
+          <p style={{ color: '#ff9ff3', margin: '0.25rem 0' }}>
+            Emotional Tone: {data.emotionalTone.toFixed(1)}%
+          </p>
+          <p style={{ color: '#54a0ff', margin: '0.25rem 0' }}>
+            Source Transparency: {data.sourceTransparency.toFixed(1)}%
           </p>
           <p style={{ color: '#666', margin: '0.25rem 0', fontSize: '0.8rem' }}>
             Articles: {data.articleCount}
@@ -78,35 +83,35 @@ const BiasTimeline = ({ timelineData }) => {
           />
           <Line
             type="monotone"
-            dataKey="overallBias"
-            stroke="#667eea"
+            dataKey="ideologicalStance"
+            stroke="#ff6b6b"
             strokeWidth={3}
-            dot={{ fill: '#667eea', strokeWidth: 2, r: 4 }}
-            name="Overall Bias"
+            dot={{ fill: '#ff6b6b', strokeWidth: 2, r: 4 }}
+            name="Ideological Stance"
           />
           <Line
             type="monotone"
-            dataKey="politicalLean"
-            stroke="#f56565"
+            dataKey="factualGrounding"
+            stroke="#48dbfb"
             strokeWidth={2}
-            dot={{ fill: '#f56565', strokeWidth: 1, r: 3 }}
-            name="Political Bias"
+            dot={{ fill: '#48dbfb', strokeWidth: 1, r: 3 }}
+            name="Factual Grounding"
           />
           <Line
             type="monotone"
-            dataKey="emotionalLanguage"
-            stroke="#ed8936"
+            dataKey="framingChoices"
+            stroke="#feca57"
             strokeWidth={2}
-            dot={{ fill: '#ed8936', strokeWidth: 1, r: 3 }}
-            name="Emotional Language"
+            dot={{ fill: '#feca57', strokeWidth: 1, r: 3 }}
+            name="Framing Choices"
           />
           <Line
             type="monotone"
-            dataKey="factualReporting"
-            stroke="#38b2ac"
+            dataKey="sourceTransparency"
+            stroke="#54a0ff"
             strokeWidth={2}
-            dot={{ fill: '#38b2ac', strokeWidth: 1, r: 3 }}
-            name="Factual Issues"
+            dot={{ fill: '#54a0ff', strokeWidth: 1, r: 3 }}
+            name="Source Transparency"
           />
         </LineChart>
       </ResponsiveContainer>
