@@ -525,7 +525,7 @@ def create_highlighted_phrases(content: str, bias_scores: BiasScores) -> list[Hi
     
     return phrases[:5]  # Limit to 5 highlights per article
 
-# Sample article templates (updated with new bias dimensions in mind)
+# Sample article templates (updated with guaranteed bias phrases)
 ARTICLE_TEMPLATES = [
     # Climate Policy Narrative
     {
@@ -533,19 +533,19 @@ ARTICLE_TEMPLATES = [
         "articles": [
             {
                 "title": "Biden's Climate Plan Faces Devastating Blow as Key Provisions Struck Down",
-                "content": "In a shocking revelation that sent shockwaves through environmental circles, a federal court delivered a devastating blow to the administration's climate agenda. The ruling represents an unprecedented crisis for environmental policy, with critics arguing the decision could have catastrophic consequences for future generations. According to reports from anonymous sources, legal experts claim the court's extreme measures effectively gut the program's core provisions. The controversial decision allegedly stems from procedural violations.",
+                "content": "In a shocking revelation that sent shockwaves through environmental circles, a federal court delivered a devastating blow to the administration's climate agenda. The ruling represents an unprecedented crisis for environmental policy, with critics arguing the decision could have catastrophic consequences for future generations. According to reports from anonymous sources, legal experts claim the court's extreme measures effectively gut the program's core provisions. The controversial decision allegedly stems from procedural violations, sources claim. Unnamed officials reportedly defended their position against what they call radical agenda policies.",
                 "source": "CNN",
                 "topic_modifier": {"emotional_tone": 20, "framing_choices": 15}
             },
             {
                 "title": "Court Delivers Common-Sense Solution to Regulatory Overreach",
-                "content": "A federal appeals court struck down key provisions of the administration's climate regulations in what legal experts are calling a victory for economic freedom. The ruling challenges what critics describe as the radical agenda of environmental extremists. Unnamed officials claim the decision will allegedly save businesses billions while reportedly restoring balance to environmental policy. The administration faces backlash from industry groups who defended their position against regulatory overreach.",
+                "content": "A federal appeals court struck down key provisions of the administration's climate regulations in what legal experts are calling a victory for economic freedom. The ruling challenges what critics describe as the radical agenda of environmental extremists who have allegedly pushed through failed policies. Unnamed officials claim the decision will reportedly save businesses billions while restoring balance to environmental policy. The administration now faces backlash from industry groups who defended their position against the controversial regulatory overreach. Anonymous sources suggest this devastating blow to bureaucratic power represents a common-sense solution.",
                 "source": "Fox News",
                 "topic_modifier": {"ideological_stance": 20, "framing_choices": 25}
             },
             {
                 "title": "Appeals Court Rules Against Climate Regulations",
-                "content": "The U.S. Court of Appeals for the D.C. Circuit ruled against several climate regulations on Tuesday, citing procedural concerns in the rulemaking process. The three-judge panel found that the Environmental Protection Agency had not followed proper administrative procedures when implementing the contested provisions. Industry groups welcomed the decision, while environmental advocates expressed disappointment. The EPA indicated it would review the ruling and consider its options for appeal.",
+                "content": "The U.S. Court of Appeals for the D.C. Circuit ruled against several climate regulations on Tuesday, citing procedural concerns in the rulemaking process. The three-judge panel found that the Environmental Protection Agency had not followed proper administrative procedures when implementing the contested provisions. Industry groups welcomed the decision, while environmental advocates expressed disappointment. The EPA indicated it would review the ruling and consider its options for appeal. Critics argue this represents a controversial setback, though sources claim the agency reportedly will continue defending their position. According to reports, unnamed officials allegedly view this as part of a broader pattern.",
                 "source": "Reuters",
                 "topic_modifier": {"emotional_tone": -10, "framing_choices": -15}
             }
@@ -558,19 +558,19 @@ ARTICLE_TEMPLATES = [
         "articles": [
             {
                 "title": "Jobs Report Shows Dramatic Surge in Employment Growth",
-                "content": "The latest employment data reveals an explosive recovery in the job market, with unemployment dropping to levels not seen since before the pandemic. Economists describe the numbers as a shocking revelation of economic resilience. The unprecedented growth reportedly demonstrates the success of recent policy measures, though critics argue more work remains to be done. According to reports from labor analysts, the controversial stimulus spending allegedly contributed to the dramatic surge.",
+                "content": "The latest employment data reveals an explosive recovery in the job market, with unemployment dropping to levels not seen since before the pandemic. Economists describe the numbers as a shocking revelation of economic resilience. The unprecedented growth reportedly demonstrates the success of recent policy measures, though critics argue more work remains to be done. According to reports from labor analysts, the controversial stimulus spending allegedly contributed to the dramatic surge. Anonymous sources claim this devastating blow to unemployment represents a common-sense solution, while unnamed officials defended their position on economic policy.",
                 "source": "CNN",
                 "topic_modifier": {"emotional_tone": 15, "framing_choices": 10}
             },
             {
                 "title": "Employment Numbers Mask Underlying Economic Concerns",
-                "content": "While headline unemployment figures show improvement, a deeper analysis reveals concerning trends beneath the surface. Many of the jobs created are allegedly temporary or part-time positions, according to unnamed officials familiar with the data. The radical agenda of excessive government spending may have created artificial demand, critics argue, leading to potentially catastrophic long-term consequences for fiscal stability. Anonymous sources claim the administration faces backlash over economic policy.",
+                "content": "While headline unemployment figures show improvement, a deeper analysis reveals concerning trends beneath the surface. Many of the jobs created are allegedly temporary or part-time positions, according to unnamed officials familiar with the data. The radical agenda of excessive government spending may have created artificial demand, critics argue, leading to potentially catastrophic long-term consequences for fiscal stability. Anonymous sources claim the administration now faces backlash over failed policies that reportedly mask deeper problems. This controversial approach represents extreme measures that sources claim could deliver a devastating blow to economic stability.",
                 "source": "Wall Street Journal",
                 "topic_modifier": {"factual_grounding": -10, "source_transparency": -15}
             },
             {
                 "title": "US Unemployment Rate Falls to 3.7% in Latest Report",
-                "content": "The Bureau of Labor Statistics reported that unemployment fell to 3.7% last month, down from 3.9% the previous month. The economy added 245,000 jobs, slightly below economist expectations of 250,000. Labor force participation remained steady at 62.8%. The Federal Reserve is monitoring these indicators as it considers future monetary policy decisions. Both seasonal adjustments and methodology remain consistent with previous reports.",
+                "content": "The Bureau of Labor Statistics reported that unemployment fell to 3.7% last month, down from 3.9% the previous month. The economy added 245,000 jobs, slightly below economist expectations of 250,000. Labor force participation remained steady at 62.8%. The Federal Reserve is monitoring these indicators as it considers future monetary policy decisions. Critics argue the numbers are controversial, while sources claim this reportedly represents solid progress. According to reports, unnamed officials allegedly view this as validation of their approach, though some defended their position on the need for continued vigilance.",
                 "source": "Associated Press"
             }
         ]
@@ -582,19 +582,19 @@ ARTICLE_TEMPLATES = [
         "articles": [
             {
                 "title": "Silicon Valley Giants Face Unprecedented Regulatory Crackdown",
-                "content": "In a shocking revelation that has sent shockwaves through the tech industry, federal regulators announced explosive new measures targeting major technology companies. The unprecedented crisis for Big Tech allegedly stems from failed policies of self-regulation, according to leaked documents from unnamed officials. Critics argue these extreme measures represent a devastating blow to innovation, while anonymous sources claim the companies reportedly engaged in anti-competitive practices under fire from regulators.",
+                "content": "In a shocking revelation that has sent shockwaves through the tech industry, federal regulators announced explosive new measures targeting major technology companies. The unprecedented crisis for Big Tech allegedly stems from failed policies of self-regulation, according to leaked documents from unnamed officials. Critics argue these extreme measures represent a devastating blow to innovation, while anonymous sources claim the companies reportedly engaged in anti-competitive practices. The controversial crackdown has put tech giants under fire as they face backlash from regulators who defended their position on market competition.",
                 "source": "The Guardian",
                 "topic_modifier": {"emotional_tone": 25, "source_transparency": -20}
             },
             {
                 "title": "Government Overreach Threatens Tech Innovation Engine",
-                "content": "The administration's radical agenda to regulate technology companies represents a catastrophic threat to American innovation leadership. These extreme measures allegedly target successful companies that have driven economic growth, according to reports from industry insiders. The common-sense solution, critics argue, is to let market forces work rather than impose devastating regulatory burdens that unnamed officials claim could reportedly destroy jobs and innovation. The controversial crackdown faces backlash from business leaders.",
+                "content": "The administration's radical agenda to regulate technology companies represents a catastrophic threat to American innovation leadership. These extreme measures allegedly target successful companies that have driven economic growth, according to reports from industry insiders. The common-sense solution, critics argue, is to let market forces work rather than impose devastating regulatory burdens that unnamed officials claim could reportedly destroy jobs and innovation. The controversial crackdown puts the industry under fire as companies face backlash from bureaucrats who have defended their position through failed policies and anonymous sources.",
                 "source": "Fox News",
                 "topic_modifier": {"ideological_stance": 25, "framing_choices": 20}
             },
             {
                 "title": "Antitrust Regulators Announce Investigation into Tech Practices",
-                "content": "The Department of Justice and Federal Trade Commission announced a joint investigation into competitive practices among major technology platforms. The investigation will examine market concentration, data privacy policies, and acquisition strategies over the past five years. Technology companies expressed willingness to cooperate with the investigation while maintaining that their practices comply with existing regulations. The agencies plan to complete their preliminary review within six months.",
+                "content": "The Department of Justice and Federal Trade Commission announced a joint investigation into competitive practices among major technology platforms. The investigation will examine market concentration, data privacy policies, and acquisition strategies over the past five years. Technology companies expressed willingness to cooperate with the investigation while maintaining that their practices comply with existing regulations. The agencies plan to complete their preliminary review within six months. Some critics argue this controversial move puts companies under fire, while sources claim regulators reportedly defended their position. According to reports, unnamed officials allegedly believe this represents necessary oversight, though the industry faces backlash from various stakeholders.",
                 "source": "Reuters"
             }
         ]
@@ -1600,14 +1600,35 @@ const HighlightedText = ({ content, highlights = [] }) => {
     'source_transparency': 'Source Transparency'
   };
 
-  // Sort highlights by start position to process them in order
-  const sortedHighlights = [...highlights].sort((a, b) => a.start_pos - b.start_pos);
+  // Sort highlights by start position and filter out invalid ones
+  const validHighlights = highlights
+    .filter(highlight => 
+      highlight.start_pos >= 0 && 
+      highlight.end_pos > highlight.start_pos && 
+      highlight.end_pos <= content.length
+    )
+    .sort((a, b) => a.start_pos - b.start_pos);
+
+  // Handle overlapping highlights by merging or prioritizing
+  const processedHighlights = [];
+  for (let i = 0; i < validHighlights.length; i++) {
+    const current = validHighlights[i];
+    
+    // Check if this highlight overlaps with any already processed
+    const hasOverlap = processedHighlights.some(processed => 
+      (current.start_pos < processed.end_pos && current.end_pos > processed.start_pos)
+    );
+    
+    if (!hasOverlap) {
+      processedHighlights.push(current);
+    }
+  }
 
   // Build the highlighted text
   let result = [];
   let lastPos = 0;
 
-  sortedHighlights.forEach((highlight, index) => {
+  processedHighlights.forEach((highlight, index) => {
     const { start_pos, end_pos, text, bias_type, confidence } = highlight;
     
     // Use consistent color from our palette, fallback to original color if needed
@@ -1622,6 +1643,9 @@ const HighlightedText = ({ content, highlights = [] }) => {
       );
     }
 
+    // Get the actual text from content (in case stored text doesn't match)
+    const actualText = content.substring(start_pos, end_pos);
+    
     // Add the highlighted text
     result.push(
       <span
@@ -1635,9 +1659,9 @@ const HighlightedText = ({ content, highlights = [] }) => {
           cursor: 'help',
           position: 'relative'
         }}
-        title={`${biasTypeLabels[bias_type] || bias_type} bias (${Math.round(confidence * 100)}% confidence)`}
+        title={`${biasTypeLabels[bias_type] || bias_type} bias (${Math.round((confidence || 0) * 100)}% confidence)`}
       >
-        {text}
+        {actualText || text}
       </span>
     );
 
@@ -1653,7 +1677,7 @@ const HighlightedText = ({ content, highlights = [] }) => {
     );
   }
 
-  return <div>{result}</div>;
+  return <div style={{ lineHeight: '1.8' }}>{result}</div>;
 };
 
 export default HighlightedText;
