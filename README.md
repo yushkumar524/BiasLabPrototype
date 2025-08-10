@@ -12,7 +12,7 @@ Live Demo: https://bias-lab-prototype.vercel.app/
 
 ## 📋 Work Sample Brief Compliance
 
-This prototype hits all the Track 2 requirements from your brief:
+This prototype hits all the Track 2 requirements from the brief:
 
 ✅ **Backend API** (FastAPI)
 - `GET /articles` — list recent articles with bias scores
@@ -106,7 +106,7 @@ BiasScores(
 ## 💡 Key Development Decisions
 
 ### 1. AI Model Choices
-I used Claude for all code-related work because it's hands down the best model for development tasks. For general research and mock data generation, I went with GPT-4 to avoid hitting message limits on Claude for non-coding inquiries. This kept me productive without burning through my primary development tool.
+I used Claude for all code-related work because it's hands down the best model for development tasks. For general research on the tools/frameworks that I'm using, I went with GPT-4 to avoid hitting message limits on Claude for non-coding inquiries. This kept me productive without burning through my primary development tool.
 
 ### 2. Technology Stack
 **FastAPI** was the obvious choice here. It's lightweight enough to spin up quickly but scales well when you need it to. Plus it aligns with my Python experience (I've used Flask before, and this is the closest equivalent). 
