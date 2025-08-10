@@ -1,4 +1,4 @@
-# 🔍 Bias Labs - Full-Stack Engineer Work Sample
+# 🔍 The Bias Lab - Full-Stack Engineer Work Sample
 
 **72-Hour Deliverable for Track 2: Full-Stack Engineer Position**
 
