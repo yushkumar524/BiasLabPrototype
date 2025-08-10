@@ -6,7 +6,7 @@ Built by: Ayush Kumar
 
 Submitted: August 10, 2025
 
-Live Demo: [Your Deployment URL]
+Live Demo: https://bias-lab-prototype.vercel.app/
 
 ---
 
