@@ -5,16 +5,17 @@ from enum import Enum
 
 class BiasScores(BaseModel):
     overall: float = Field(..., ge=0, le=100, description="Overall bias score 0-100")
-    political_lean: float = Field(..., ge=-100, le=100, description="Political lean -100 (left) to 100 (right)")
-    emotional_language: float = Field(..., ge=0, le=100, description="Emotional/sensational language score")
-    source_diversity: float = Field(..., ge=0, le=100, description="Source diversity and fact-checking score")
-    factual_reporting: float = Field(..., ge=0, le=100, description="Factual accuracy score")
+    ideological_stance: float = Field(..., ge=-100, le=100, description="Ideological stance -100 (left) to 100 (right)")
+    factual_grounding: float = Field(..., ge=0, le=100, description="Factual accuracy and evidence-based reporting score")
+    framing_choices: float = Field(..., ge=0, le=100, description="Neutral vs. biased framing and perspective score")
+    emotional_tone: float = Field(..., ge=0, le=100, description="Emotional/sensational language score")
+    source_transparency: float = Field(..., ge=0, le=100, description="Source attribution and transparency score")
 
 class HighlightedPhrase(BaseModel):
     text: str = Field(..., description="The biased phrase")
     start_pos: int = Field(..., description="Starting position in text")
     end_pos: int = Field(..., description="Ending position in text")
-    bias_type: str = Field(..., description="Type of bias (political_lean, emotional_language, etc.)")
+    bias_type: str = Field(..., description="Type of bias (ideological_stance, factual_grounding, framing_choices, emotional_tone, source_transparency)")
     confidence: float = Field(..., ge=0, le=1, description="AI confidence in bias detection")
     color: str = Field(..., description="Hex color for highlighting")
 

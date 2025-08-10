@@ -37,9 +37,11 @@ const Homepage = () => {
   };
 
   const getIdeologicalStanceLabel = (ideologicalStance) => {
-    if (ideologicalStance > 10) return 'Right';
-    if (ideologicalStance < -10) return 'Left';
-    return 'Center';
+    if (ideologicalStance >= 60) return 'Right';
+    if (ideologicalStance >= 20) return 'Skews Right';
+    if (ideologicalStance > -20) return 'Center';
+    if (ideologicalStance > -60) return 'Skews Left';
+    return 'Left';
   };
 
   const formatDate = (dateString) => {

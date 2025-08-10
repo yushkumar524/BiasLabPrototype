@@ -35,6 +35,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Helper function to ensure consistent ArticleSummary conversion
+def article_to_summary(article: Article) -> ArticleSummary:
+    """Convert Article to ArticleSummary ensuring data consistency"""
+    return ArticleSummary(
+        id=article.id,
+        title=article.title,
+        source=article.source,
+        published_date=article.published_date,
+        bias_scores=article.bias_scores,  # Use exact same bias_scores object
+        narrative_id=article.narrative_id
+    )
+
 # Health check endpoint
 @app.get("/health")
 async def health_check():
@@ -86,18 +98,8 @@ async def get_articles(
     # Apply pagination
     paginated_articles = articles[offset:offset + limit]
     
-    # Convert to ArticleSummary format
-    article_summaries = [
-        ArticleSummary(
-            id=article.id,
-            title=article.title,
-            source=article.source,
-            published_date=article.published_date,
-            bias_scores=article.bias_scores,
-            narrative_id=article.narrative_id
-        )
-        for article in paginated_articles
-    ]
+    # Convert to ArticleSummary format using helper function
+    article_summaries = [article_to_summary(article) for article in paginated_articles]
     
     return article_summaries
 
@@ -163,27 +165,18 @@ async def get_narrative_articles(narrative_id: str):
     if not narrative:
         raise HTTPException(status_code=404, detail=f"Narrative with ID {narrative_id} not found")
     
-    # Get articles for this narrative
-    narrative_articles = [
-        article for article in get_all_articles() 
-        if article.id in narrative.article_ids
-    ]
+    # Get articles for this narrative - using get_article_by_id to ensure consistency
+    narrative_articles = []
+    for article_id in narrative.article_ids:
+        article = get_article_by_id(article_id)
+        if article:
+            narrative_articles.append(article)
     
     # Sort by publication date
     narrative_articles = sorted(narrative_articles, key=lambda x: x.published_date, reverse=True)
     
-    # Convert to ArticleSummary format
-    article_summaries = [
-        ArticleSummary(
-            id=article.id,
-            title=article.title,
-            source=article.source,
-            published_date=article.published_date,
-            bias_scores=article.bias_scores,
-            narrative_id=article.narrative_id
-        )
-        for article in narrative_articles
-    ]
+    # Convert to ArticleSummary format using helper function
+    article_summaries = [article_to_summary(article) for article in narrative_articles]
     
     return article_summaries
 
@@ -197,11 +190,13 @@ async def get_statistics():
     if not articles:
         return {"error": "No articles available"}
     
-    # Calculate average bias scores across all articles
+    # Calculate average bias scores across all articles for the 5 correct dimensions
     avg_overall_bias = sum(a.bias_scores.overall for a in articles) / len(articles)
-    avg_political_lean = sum(a.bias_scores.political_lean for a in articles) / len(articles)
-    avg_emotional_language = sum(a.bias_scores.emotional_language for a in articles) / len(articles)
-    avg_factual_reporting = sum(a.bias_scores.factual_reporting for a in articles) / len(articles)
+    avg_ideological_stance = sum(a.bias_scores.ideological_stance for a in articles) / len(articles)
+    avg_factual_grounding = sum(a.bias_scores.factual_grounding for a in articles) / len(articles)
+    avg_framing_choices = sum(a.bias_scores.framing_choices for a in articles) / len(articles)
+    avg_emotional_tone = sum(a.bias_scores.emotional_tone for a in articles) / len(articles)
+    avg_source_transparency = sum(a.bias_scores.source_transparency for a in articles) / len(articles)
     
     # Source distribution
     source_counts = {}
@@ -213,15 +208,59 @@ async def get_statistics():
         "total_narratives": len(narratives),
         "average_bias_scores": {
             "overall": round(avg_overall_bias, 1),
-            "political_lean": round(avg_political_lean, 1),
-            "emotional_language": round(avg_emotional_language, 1),
-            "factual_reporting": round(avg_factual_reporting, 1)
+            "ideological_stance": round(avg_ideological_stance, 1),
+            "factual_grounding": round(avg_factual_grounding, 1),
+            "framing_choices": round(avg_framing_choices, 1),
+            "emotional_tone": round(avg_emotional_tone, 1),
+            "source_transparency": round(avg_source_transparency, 1)
         },
         "source_distribution": source_counts,
         "time_range": {
             "earliest_article": min(a.published_date for a in articles).isoformat(),
             "latest_article": max(a.published_date for a in articles).isoformat()
         }
+    }
+
+# Debug endpoint to check data consistency
+@app.get("/debug/article/{article_id}")
+async def debug_article_consistency(article_id: str):
+    """Debug endpoint to check if article data is consistent across endpoints"""
+    
+    # Get article directly
+    article = get_article_by_id(article_id)
+    if not article:
+        raise HTTPException(status_code=404, detail="Article not found")
+    
+    # Find which narrative this article belongs to
+    narrative = None
+    for n in get_all_narratives():
+        if article_id in n.article_ids:
+            narrative = n
+            break
+    
+    # Get article via narrative endpoint
+    narrative_article_summary = None
+    if narrative:
+        narrative_articles = []
+        for aid in narrative.article_ids:
+            a = get_article_by_id(aid)
+            if a and a.id == article_id:
+                narrative_article_summary = article_to_summary(a)
+                break
+    
+    return {
+        "article_direct": {
+            "id": article.id,
+            "title": article.title,
+            "bias_scores": article.bias_scores.dict()
+        },
+        "article_via_narrative": {
+            "id": narrative_article_summary.id if narrative_article_summary else None,
+            "title": narrative_article_summary.title if narrative_article_summary else None,
+            "bias_scores": narrative_article_summary.bias_scores.dict() if narrative_article_summary else None
+        },
+        "scores_match": article.bias_scores.dict() == narrative_article_summary.bias_scores.dict() if narrative_article_summary else None,
+        "narrative_id": narrative.id if narrative else None
     }
 
 if __name__ == "__main__":

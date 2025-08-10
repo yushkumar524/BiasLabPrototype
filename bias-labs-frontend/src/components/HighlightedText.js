@@ -27,14 +27,35 @@ const HighlightedText = ({ content, highlights = [] }) => {
     'source_transparency': 'Source Transparency'
   };
 
-  // Sort highlights by start position to process them in order
-  const sortedHighlights = [...highlights].sort((a, b) => a.start_pos - b.start_pos);
+  // Sort highlights by start position and filter out invalid ones
+  const validHighlights = highlights
+    .filter(highlight => 
+      highlight.start_pos >= 0 && 
+      highlight.end_pos > highlight.start_pos && 
+      highlight.end_pos <= content.length
+    )
+    .sort((a, b) => a.start_pos - b.start_pos);
+
+  // Handle overlapping highlights by merging or prioritizing
+  const processedHighlights = [];
+  for (let i = 0; i < validHighlights.length; i++) {
+    const current = validHighlights[i];
+    
+    // Check if this highlight overlaps with any already processed
+    const hasOverlap = processedHighlights.some(processed => 
+      (current.start_pos < processed.end_pos && current.end_pos > processed.start_pos)
+    );
+    
+    if (!hasOverlap) {
+      processedHighlights.push(current);
+    }
+  }
 
   // Build the highlighted text
   let result = [];
   let lastPos = 0;
 
-  sortedHighlights.forEach((highlight, index) => {
+  processedHighlights.forEach((highlight, index) => {
     const { start_pos, end_pos, text, bias_type, confidence } = highlight;
     
     // Use consistent color from our palette, fallback to original color if needed
@@ -49,6 +70,9 @@ const HighlightedText = ({ content, highlights = [] }) => {
       );
     }
 
+    // Get the actual text from content (in case stored text doesn't match)
+    const actualText = content.substring(start_pos, end_pos);
+    
     // Add the highlighted text
     result.push(
       <span
@@ -62,9 +86,9 @@ const HighlightedText = ({ content, highlights = [] }) => {
           cursor: 'help',
           position: 'relative'
         }}
-        title={`${biasTypeLabels[bias_type] || bias_type} bias (${Math.round(confidence * 100)}% confidence)`}
+        title={`${biasTypeLabels[bias_type] || bias_type} bias (${Math.round((confidence || 0) * 100)}% confidence)`}
       >
-        {text}
+        {actualText || text}
       </span>
     );
 
@@ -80,7 +104,7 @@ const HighlightedText = ({ content, highlights = [] }) => {
     );
   }
 
-  return <div>{result}</div>;
+  return <div style={{ lineHeight: '1.8' }}>{result}</div>;
 };
 
 export default HighlightedText;

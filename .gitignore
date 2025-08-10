@@ -83,3 +83,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+# txt file for LLM prompting
+bias-labs-text.md

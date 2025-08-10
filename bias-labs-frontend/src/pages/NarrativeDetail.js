@@ -57,9 +57,11 @@ const NarrativeDetail = () => {
   };
 
   const getIdeologicalStanceLabel = (ideologicalStance) => {
-    if (ideologicalStance > 10) return 'Right';
-    if (ideologicalStance < -10) return 'Left';
-    return 'Center';
+    if (ideologicalStance >= 60) return 'Right';
+    if (ideologicalStance >= 20) return 'Skews Right';
+    if (ideologicalStance > -20) return 'Center';
+    if (ideologicalStance > -60) return 'Skews Left';
+    return 'Left';
   };
 
   if (loading) {
@@ -155,8 +157,8 @@ const NarrativeDetail = () => {
               </div>
               <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', flexWrap: 'wrap' }}>
                 <span>Overall Bias: <strong>{article.bias_scores.overall.toFixed(1)}%</strong></span>
-                <span>Ideological: <strong>{getIdeologicalStanceLabel(article.bias_scores.ideological_stance)} ({Math.abs(article.bias_scores.ideological_stance).toFixed(0)})</strong></span>
-                <span>Factual: <strong>{article.bias_scores.factual_grounding.toFixed(0)}%</strong></span>
+                <span>Ideological: <strong>{getIdeologicalStanceLabel(article.bias_scores.ideological_stance)}</strong></span>
+                <span>Factual Issues: <strong>{(100 - article.bias_scores.factual_grounding).toFixed(0)}%</strong></span>
                 <span>Emotional: <strong>{article.bias_scores.emotional_tone.toFixed(0)}%</strong></span>
               </div>
             </div>

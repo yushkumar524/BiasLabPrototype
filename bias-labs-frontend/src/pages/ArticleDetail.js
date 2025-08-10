@@ -50,6 +50,14 @@ const ArticleDetail = () => {
     return colors[source] || '#666666';
   };
 
+  const getIdeologicalStanceLabel = (ideologicalStance) => {
+    if (ideologicalStance >= 60) return 'Right';
+    if (ideologicalStance >= 20) return 'Skews Right';
+    if (ideologicalStance > -20) return 'Center';
+    if (ideologicalStance > -60) return 'Skews Left';
+    return 'Left';
+  };
+
   if (loading) {
     return <div className="loading">Loading article...</div>;
   }
@@ -200,7 +208,10 @@ const ArticleDetail = () => {
               <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#2d3748' }}>
                 Overall Bias Score: {article.bias_scores.overall.toFixed(1)}%
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.5rem' }}>
+              <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
+                Ideological Lean: <strong>{getIdeologicalStanceLabel(article.bias_scores.ideological_stance)}</strong>
+              </div>
+              <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.25rem' }}>
                 See radar chart above for detailed breakdown
               </div>
             </div>

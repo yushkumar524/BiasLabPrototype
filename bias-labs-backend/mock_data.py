@@ -5,88 +5,110 @@ import uuid
 
 # Color scheme for bias highlighting
 BIAS_COLORS = {
-    "political_lean": "#ff6b6b",      # Red for political bias
-    "emotional_language": "#feca57",   # Orange for emotional language
-    "source_diversity": "#48dbfb",     # Blue for source issues
-    "factual_reporting": "#ff9ff3",    # Pink for factual concerns
-    "sensationalism": "#54a0ff"        # Purple for sensationalism
+    "ideological_stance": "#ff6b6b",      # Red for ideological bias
+    "factual_grounding": "#48dbfb",       # Blue for factual issues
+    "framing_choices": "#feca57",         # Orange for framing bias
+    "emotional_tone": "#ff9ff3",          # Pink for emotional language
+    "source_transparency": "#54a0ff"      # Purple for source transparency issues
 }
 
 # Sample news sources with typical bias patterns
 NEWS_SOURCES = {
-    "CNN": {"political_lean": -25, "factual_reporting": 75, "emotional_language": 35},
-    "Fox News": {"political_lean": 45, "factual_reporting": 65, "emotional_language": 55},
-    "Reuters": {"political_lean": 5, "factual_reporting": 90, "emotional_language": 15},
-    "BBC": {"political_lean": -10, "factual_reporting": 85, "emotional_language": 20},
-    "Wall Street Journal": {"political_lean": 20, "factual_reporting": 80, "emotional_language": 25},
-    "The Guardian": {"political_lean": -35, "factual_reporting": 70, "emotional_language": 40},
-    "Associated Press": {"political_lean": 0, "factual_reporting": 95, "emotional_language": 10},
-    "New York Times": {"political_lean": -20, "factual_reporting": 80, "emotional_language": 30}
+    "CNN": {"ideological_stance": -25, "factual_grounding": 75, "emotional_tone": 35, "framing_choices": 40, "source_transparency": 70},
+    "Fox News": {"ideological_stance": 45, "factual_grounding": 65, "emotional_tone": 55, "framing_choices": 50, "source_transparency": 60},
+    "Reuters": {"ideological_stance": 5, "factual_grounding": 90, "emotional_tone": 15, "framing_choices": 20, "source_transparency": 85},
+    "BBC": {"ideological_stance": -10, "factual_grounding": 85, "emotional_tone": 20, "framing_choices": 25, "source_transparency": 80},
+    "Wall Street Journal": {"ideological_stance": 20, "factual_grounding": 80, "emotional_tone": 25, "framing_choices": 30, "source_transparency": 75},
+    "The Guardian": {"ideological_stance": -35, "factual_grounding": 70, "emotional_tone": 40, "framing_choices": 45, "source_transparency": 65},
+    "Associated Press": {"ideological_stance": 0, "factual_grounding": 95, "emotional_tone": 10, "framing_choices": 15, "source_transparency": 90},
+    "New York Times": {"ideological_stance": -20, "factual_grounding": 80, "emotional_tone": 30, "framing_choices": 35, "source_transparency": 75}
 }
 
 def create_bias_scores(source: str, topic_modifier: dict = None) -> BiasScores:
     """Create realistic bias scores based on source and topic"""
-    base = NEWS_SOURCES.get(source, {"political_lean": 0, "factual_reporting": 75, "emotional_language": 30})
+    base = NEWS_SOURCES.get(source, {"ideological_stance": 0, "factual_grounding": 75, "emotional_tone": 30, "framing_choices": 35, "source_transparency": 70})
     
     # Add some randomness
-    political_lean = base["political_lean"] + random.randint(-10, 10)
-    factual_reporting = max(0, min(100, base["factual_reporting"] + random.randint(-15, 15)))
-    emotional_language = max(0, min(100, base["emotional_language"] + random.randint(-10, 20)))
+    ideological_stance = base["ideological_stance"] + random.randint(-10, 10)
+    factual_grounding = max(0, min(100, base["factual_grounding"] + random.randint(-15, 15)))
+    emotional_tone = max(0, min(100, base["emotional_tone"] + random.randint(-10, 20)))
+    framing_choices = max(0, min(100, base["framing_choices"] + random.randint(-10, 15)))
+    source_transparency = max(0, min(100, base["source_transparency"] + random.randint(-10, 15)))
     
     # Apply topic modifiers if provided
     if topic_modifier:
-        political_lean += topic_modifier.get("political_lean", 0)
-        emotional_language += topic_modifier.get("emotional_language", 0)
-        factual_reporting += topic_modifier.get("factual_reporting", 0)
+        ideological_stance += topic_modifier.get("ideological_stance", 0)
+        emotional_tone += topic_modifier.get("emotional_tone", 0)
+        factual_grounding += topic_modifier.get("factual_grounding", 0)
+        framing_choices += topic_modifier.get("framing_choices", 0)
+        source_transparency += topic_modifier.get("source_transparency", 0)
     
     # Clamp values
-    political_lean = max(-100, min(100, political_lean))
-    emotional_language = max(0, min(100, emotional_language))
-    factual_reporting = max(0, min(100, factual_reporting))
+    ideological_stance = max(-100, min(100, ideological_stance))
+    emotional_tone = max(0, min(100, emotional_tone))
+    factual_grounding = max(0, min(100, factual_grounding))
+    framing_choices = max(0, min(100, framing_choices))
+    source_transparency = max(0, min(100, source_transparency))
     
-    # Calculate other scores
-    source_diversity = random.randint(40, 90)
-    overall = (abs(political_lean) + emotional_language + (100 - factual_reporting)) / 3
+    # Calculate overall bias score
+    overall = (abs(ideological_stance) + emotional_tone + (100 - factual_grounding) + framing_choices + (100 - source_transparency)) / 5
     
     return BiasScores(
         overall=round(overall, 1),
-        political_lean=round(political_lean, 1),
-        emotional_language=round(emotional_language, 1),
-        source_diversity=round(source_diversity, 1),
-        factual_reporting=round(factual_reporting, 1)
+        ideological_stance=round(ideological_stance, 1),
+        factual_grounding=round(factual_grounding, 1),
+        framing_choices=round(framing_choices, 1),
+        emotional_tone=round(emotional_tone, 1),
+        source_transparency=round(source_transparency, 1)
     )
 
 def create_highlighted_phrases(content: str, bias_scores: BiasScores) -> list[HighlightedPhrase]:
     """Generate realistic highlighted phrases based on content and bias"""
     phrases = []
     
-    # Political bias phrases
-    political_phrases = [
-        ("devastating blow", "political_lean"),
-        ("radical agenda", "political_lean"),
-        ("common-sense solution", "political_lean"),
-        ("extreme measures", "political_lean"),
-        ("failed policies", "political_lean")
+    # Ideological stance phrases
+    ideological_phrases = [
+        ("devastating blow", "ideological_stance"),
+        ("radical agenda", "ideological_stance"),
+        ("common-sense solution", "ideological_stance"),
+        ("extreme measures", "ideological_stance"),
+        ("failed policies", "ideological_stance")
     ]
     
-    # Emotional language phrases
+    # Emotional tone phrases
     emotional_phrases = [
-        ("shocking revelation", "emotional_language"),
-        ("catastrophic", "emotional_language"),
-        ("unprecedented crisis", "emotional_language"),
-        ("explosive", "emotional_language"),
-        ("dramatic surge", "emotional_language")
+        ("shocking revelation", "emotional_tone"),
+        ("catastrophic", "emotional_tone"),
+        ("unprecedented crisis", "emotional_tone"),
+        ("explosive", "emotional_tone"),
+        ("dramatic surge", "emotional_tone")
     ]
     
-    # Factual reporting issues
+    # Factual grounding issues
     factual_phrases = [
-        ("sources claim", "factual_reporting"),
-        ("allegedly", "factual_reporting"),
-        ("reportedly", "factual_reporting"),
-        ("critics argue", "factual_reporting")
+        ("sources claim", "factual_grounding"),
+        ("allegedly", "factual_grounding"),
+        ("reportedly", "factual_grounding"),
+        ("critics argue", "factual_grounding")
     ]
     
-    all_phrases = political_phrases + emotional_phrases + factual_phrases
+    # Framing choices
+    framing_phrases = [
+        ("under fire", "framing_choices"),
+        ("faces backlash", "framing_choices"),
+        ("controversial", "framing_choices"),
+        ("defended their position", "framing_choices")
+    ]
+    
+    # Source transparency issues
+    transparency_phrases = [
+        ("anonymous sources", "source_transparency"),
+        ("unnamed officials", "source_transparency"),
+        ("according to reports", "source_transparency"),
+        ("leaked documents", "source_transparency")
+    ]
+    
+    all_phrases = ideological_phrases + emotional_phrases + factual_phrases + framing_phrases + transparency_phrases
     
     for phrase_text, bias_type in all_phrases:
         if phrase_text.lower() in content.lower():
@@ -103,7 +125,7 @@ def create_highlighted_phrases(content: str, bias_scores: BiasScores) -> list[Hi
     
     return phrases[:5]  # Limit to 5 highlights per article
 
-# Sample article templates
+# Sample article templates (updated with guaranteed bias phrases)
 ARTICLE_TEMPLATES = [
     # Climate Policy Narrative
     {
@@ -111,21 +133,21 @@ ARTICLE_TEMPLATES = [
         "articles": [
             {
                 "title": "Biden's Climate Plan Faces Devastating Blow as Key Provisions Struck Down",
-                "content": "In a shocking revelation that sent shockwaves through environmental circles, a federal court delivered a devastating blow to the administration's climate agenda. The ruling represents an unprecedented crisis for environmental policy, with critics arguing the decision could catastrophic consequences for future generations. Legal experts claim the court's extreme measures effectively gut the program's core provisions.",
+                "content": "In a shocking revelation that sent shockwaves through environmental circles, a federal court delivered a devastating blow to the administration's climate agenda. The ruling represents an unprecedented crisis for environmental policy, with critics arguing the decision could have catastrophic consequences for future generations. According to reports from anonymous sources, legal experts claim the court's extreme measures effectively gut the program's core provisions. The controversial decision allegedly stems from procedural violations, sources claim. Unnamed officials reportedly defended their position against what they call radical agenda policies.",
                 "source": "CNN",
-                "topic_modifier": {"emotional_language": 20}
+                "topic_modifier": {"emotional_tone": 20, "framing_choices": 15}
             },
             {
                 "title": "Court Delivers Common-Sense Solution to Regulatory Overreach",
-                "content": "A federal appeals court struck down key provisions of the administration's climate regulations in what legal experts are calling a victory for economic freedom. The ruling challenges what critics describe as the radical agenda of environmental extremists. Sources claim the decision will allegedly save businesses billions while reportedly restoring balance to environmental policy.",
+                "content": "A federal appeals court struck down key provisions of the administration's climate regulations in what legal experts are calling a victory for economic freedom. The ruling challenges what critics describe as the radical agenda of environmental extremists who have allegedly pushed through failed policies. Unnamed officials claim the decision will reportedly save businesses billions while restoring balance to environmental policy. The administration now faces backlash from industry groups who defended their position against the controversial regulatory overreach. Anonymous sources suggest this devastating blow to bureaucratic power represents a common-sense solution.",
                 "source": "Fox News",
-                "topic_modifier": {"political_lean": 20}
+                "topic_modifier": {"ideological_stance": 20, "framing_choices": 25}
             },
             {
                 "title": "Appeals Court Rules Against Climate Regulations",
-                "content": "The U.S. Court of Appeals for the D.C. Circuit ruled against several climate regulations on Tuesday, citing procedural concerns. The three-judge panel found that the Environmental Protection Agency had not followed proper rulemaking procedures when implementing the contested provisions. Industry groups welcomed the decision, while environmental advocates expressed disappointment.",
+                "content": "The U.S. Court of Appeals for the D.C. Circuit ruled against several climate regulations on Tuesday, citing procedural concerns in the rulemaking process. The three-judge panel found that the Environmental Protection Agency had not followed proper administrative procedures when implementing the contested provisions. Industry groups welcomed the decision, while environmental advocates expressed disappointment. The EPA indicated it would review the ruling and consider its options for appeal. Critics argue this represents a controversial setback, though sources claim the agency reportedly will continue defending their position. According to reports, unnamed officials allegedly view this as part of a broader pattern.",
                 "source": "Reuters",
-                "topic_modifier": {"emotional_language": -10}
+                "topic_modifier": {"emotional_tone": -10, "framing_choices": -15}
             }
         ]
     },
@@ -136,19 +158,19 @@ ARTICLE_TEMPLATES = [
         "articles": [
             {
                 "title": "Jobs Report Shows Dramatic Surge in Employment Growth",
-                "content": "The latest employment data reveals an explosive recovery in the job market, with unemployment dropping to levels not seen since before the pandemic. Economists describe the numbers as a shocking revelation of economic resilience. The unprecedented growth reportedly demonstrates the success of recent policy measures, though critics argue more work remains to be done.",
+                "content": "The latest employment data reveals an explosive recovery in the job market, with unemployment dropping to levels not seen since before the pandemic. Economists describe the numbers as a shocking revelation of economic resilience. The unprecedented growth reportedly demonstrates the success of recent policy measures, though critics argue more work remains to be done. According to reports from labor analysts, the controversial stimulus spending allegedly contributed to the dramatic surge. Anonymous sources claim this devastating blow to unemployment represents a common-sense solution, while unnamed officials defended their position on economic policy.",
                 "source": "CNN",
-                "topic_modifier": {"emotional_language": 15}
+                "topic_modifier": {"emotional_tone": 15, "framing_choices": 10}
             },
             {
                 "title": "Employment Numbers Mask Underlying Economic Concerns",
-                "content": "While headline unemployment figures show improvement, a deeper analysis reveals concerning trends beneath the surface. Many of the jobs created are allegedly temporary or part-time positions, sources claim. The radical agenda of excessive government spending may have created artificial demand, critics argue, leading to potentially catastrophic long-term consequences for fiscal stability.",
+                "content": "While headline unemployment figures show improvement, a deeper analysis reveals concerning trends beneath the surface. Many of the jobs created are allegedly temporary or part-time positions, according to unnamed officials familiar with the data. The radical agenda of excessive government spending may have created artificial demand, critics argue, leading to potentially catastrophic long-term consequences for fiscal stability. Anonymous sources claim the administration now faces backlash over failed policies that reportedly mask deeper problems. This controversial approach represents extreme measures that sources claim could deliver a devastating blow to economic stability.",
                 "source": "Wall Street Journal",
-                "topic_modifier": {"factual_reporting": -10}
+                "topic_modifier": {"factual_grounding": -10, "source_transparency": -15}
             },
             {
                 "title": "US Unemployment Rate Falls to 3.7% in Latest Report",
-                "content": "The Bureau of Labor Statistics reported that unemployment fell to 3.7% last month, down from 3.9% the previous month. The economy added 245,000 jobs, slightly below economist expectations of 250,000. Labor force participation remained steady at 62.8%. The Federal Reserve is monitoring these indicators as it considers future monetary policy decisions.",
+                "content": "The Bureau of Labor Statistics reported that unemployment fell to 3.7% last month, down from 3.9% the previous month. The economy added 245,000 jobs, slightly below economist expectations of 250,000. Labor force participation remained steady at 62.8%. The Federal Reserve is monitoring these indicators as it considers future monetary policy decisions. Critics argue the numbers are controversial, while sources claim this reportedly represents solid progress. According to reports, unnamed officials allegedly view this as validation of their approach, though some defended their position on the need for continued vigilance.",
                 "source": "Associated Press"
             }
         ]
@@ -160,19 +182,19 @@ ARTICLE_TEMPLATES = [
         "articles": [
             {
                 "title": "Silicon Valley Giants Face Unprecedented Regulatory Crackdown",
-                "content": "In a shocking revelation that has sent shockwaves through the tech industry, federal regulators announced explosive new measures targeting major technology companies. The unprecedented crisis for Big Tech allegedly stems from failed policies of self-regulation. Critics argue these extreme measures represent a devastating blow to innovation, while sources claim the companies reportedly engaged in anti-competitive practices.",
+                "content": "In a shocking revelation that has sent shockwaves through the tech industry, federal regulators announced explosive new measures targeting major technology companies. The unprecedented crisis for Big Tech allegedly stems from failed policies of self-regulation, according to leaked documents from unnamed officials. Critics argue these extreme measures represent a devastating blow to innovation, while anonymous sources claim the companies reportedly engaged in anti-competitive practices. The controversial crackdown has put tech giants under fire as they face backlash from regulators who defended their position on market competition.",
                 "source": "The Guardian",
-                "topic_modifier": {"emotional_language": 25}
+                "topic_modifier": {"emotional_tone": 25, "source_transparency": -20}
             },
             {
                 "title": "Government Overreach Threatens Tech Innovation Engine",
-                "content": "The administration's radical agenda to regulate technology companies represents a catastrophic threat to American innovation leadership. These extreme measures allegedly target successful companies that have driven economic growth. The common-sense solution, critics argue, is to let market forces work rather than impose devastating regulatory burdens that sources claim could reportedly destroy jobs and innovation.",
+                "content": "The administration's radical agenda to regulate technology companies represents a catastrophic threat to American innovation leadership. These extreme measures allegedly target successful companies that have driven economic growth, according to reports from industry insiders. The common-sense solution, critics argue, is to let market forces work rather than impose devastating regulatory burdens that unnamed officials claim could reportedly destroy jobs and innovation. The controversial crackdown puts the industry under fire as companies face backlash from bureaucrats who have defended their position through failed policies and anonymous sources.",
                 "source": "Fox News",
-                "topic_modifier": {"political_lean": 25}
+                "topic_modifier": {"ideological_stance": 25, "framing_choices": 20}
             },
             {
                 "title": "Antitrust Regulators Announce Investigation into Tech Practices",
-                "content": "The Department of Justice and Federal Trade Commission announced a joint investigation into competitive practices among major technology platforms. The investigation will examine market concentration, data privacy policies, and acquisition strategies. Technology companies expressed willingness to cooperate with the investigation while maintaining that their practices comply with existing regulations.",
+                "content": "The Department of Justice and Federal Trade Commission announced a joint investigation into competitive practices among major technology platforms. The investigation will examine market concentration, data privacy policies, and acquisition strategies over the past five years. Technology companies expressed willingness to cooperate with the investigation while maintaining that their practices comply with existing regulations. The agencies plan to complete their preliminary review within six months. Some critics argue this controversial move puts companies under fire, while sources claim regulators reportedly defended their position. According to reports, unnamed officials allegedly believe this represents necessary oversight, though the industry faces backlash from various stakeholders.",
                 "source": "Reuters"
             }
         ]
@@ -243,19 +265,21 @@ def generate_mock_narratives(articles: list[Article]) -> list[Narrative]:
         if not narrative_articles:
             continue
             
-        # Calculate average bias scores
+        # Calculate average bias scores across all 5 dimensions
         avg_overall = sum(a.bias_scores.overall for a in narrative_articles) / len(narrative_articles)
-        avg_political = sum(a.bias_scores.political_lean for a in narrative_articles) / len(narrative_articles)
-        avg_emotional = sum(a.bias_scores.emotional_language for a in narrative_articles) / len(narrative_articles)
-        avg_source = sum(a.bias_scores.source_diversity for a in narrative_articles) / len(narrative_articles)
-        avg_factual = sum(a.bias_scores.factual_reporting for a in narrative_articles) / len(narrative_articles)
+        avg_ideological = sum(a.bias_scores.ideological_stance for a in narrative_articles) / len(narrative_articles)
+        avg_factual = sum(a.bias_scores.factual_grounding for a in narrative_articles) / len(narrative_articles)
+        avg_framing = sum(a.bias_scores.framing_choices for a in narrative_articles) / len(narrative_articles)
+        avg_emotional = sum(a.bias_scores.emotional_tone for a in narrative_articles) / len(narrative_articles)
+        avg_transparency = sum(a.bias_scores.source_transparency for a in narrative_articles) / len(narrative_articles)
         
         avg_bias_scores = BiasScores(
             overall=round(avg_overall, 1),
-            political_lean=round(avg_political, 1),
-            emotional_language=round(avg_emotional, 1),
-            source_diversity=round(avg_source, 1),
-            factual_reporting=round(avg_factual, 1)
+            ideological_stance=round(avg_ideological, 1),
+            factual_grounding=round(avg_factual, 1),
+            framing_choices=round(avg_framing, 1),
+            emotional_tone=round(avg_emotional, 1),
+            source_transparency=round(avg_transparency, 1)
         )
         
         # Create bias evolution timeline
