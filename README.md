@@ -3,7 +3,9 @@
 **72-Hour Deliverable for Track 2: Full-Stack Engineer Position**
 
 Built by: Ayush Kumar
+
 Submitted: August 10, 2025
+
 Live Demo: [Your Deployment URL]
 
 ---
